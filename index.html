@@ -3,1108 +3,562 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⬇️ All in One Downloader</title>
+    <title>⬇️ All in One Downloader + YouTube Search</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
         body {
             background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
         }
         .container {
-            max-width: 750px;
-            width: 100%;
-            background: rgba(20, 20, 40, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 32px;
-            padding: 30px;
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
+            max-width: 750px; width: 100%;
+            background: rgba(20, 20, 40, 0.7); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 32px;
+            padding: 30px; box-shadow: 0 30px 50px rgba(0,0,0,0.5);
         }
         h1 {
-            color: #fff;
-            font-size: 2.3rem;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 5px;
+            color: #fff; font-size: 2.3rem; font-weight: 800; text-align: center; margin-bottom: 5px;
             background: linear-gradient(to right, #f7971e, #ffd200);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-        .subtitle {
-            color: #b0b0d0;
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-        }
-        .input-area {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            flex: 1;
-        }
+        .subtitle { color: #b0b0d0; text-align: center; margin-bottom: 25px; font-size: 0.95rem; }
+        .input-area { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        .input-wrapper { position: relative; display: flex; flex: 1; }
         input {
-            flex: 1;
-            padding: 16px 85px 16px 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1.5px solid rgba(255, 255, 255, 0.15);
-            border-radius: 60px;
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s;
-            width: 100%;
+            flex: 1; padding: 16px 85px 16px 20px;
+            background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.15);
+            border-radius: 60px; color: #fff; font-size: 1rem; outline: none; transition: all 0.3s; width: 100%;
         }
-        input::placeholder {
-            color: #888;
-        }
-        input:focus {
-            border-color: #f7971e;
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 0 4px rgba(247, 151, 30, 0.2);
-        }
+        input::placeholder { color: #888; }
+        input:focus { border-color: #f7971e; background: rgba(0,0,0,0.5); box-shadow: 0 0 0 4px rgba(247,151,30,0.2); }
         button {
             padding: 16px 30px;
             background: linear-gradient(145deg, #f7971e, #ffd200);
-            border: none;
-            border-radius: 60px;
-            color: #1a1a2e;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 6px 15px rgba(247, 151, 30, 0.3);
+            border: none; border-radius: 60px; color: #1a1a2e; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 6px 15px rgba(247,151,30,0.3);
         }
-        button:hover {
-            transform: scale(1.03);
-            box-shadow: 0 10px 25px rgba(247, 151, 30, 0.5);
-        }
-        .input-buttons {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            gap: 5px;
-        }
-        .input-buttons button {
-            padding: 8px 12px;
-            font-size: 0.9rem;
-            box-shadow: none;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border: none;
-        }
-        .input-buttons button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-            box-shadow: none;
-        }
-        .clear-btn {
-            font-size: 1.2rem !important;
-            font-weight: 400 !important;
-        }
-        button:disabled {
-            opacity: 0.5;
-            transform: none;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        .platform-badge {
-            display: inline-block;
-            padding: 8px 18px;
-            background: rgba(247, 151, 30, 0.15);
-            border-radius: 40px;
-            color: #ffd200;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 18px;
-            border: 1px solid rgba(247, 151, 30, 0.3);
-        }
-        .result-area {
-            margin-top: 25px;
-        }
-        .preview-card {
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 24px;
-            padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .media-title {
-            color: #fff;
-            font-weight: 700;
-            margin-bottom: 15px;
-            font-size: 1rem;
-            word-break: break-word;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .thumbnail {
-            width: 100%;
-            max-height: 280px;
-            object-fit: cover;
-            border-radius: 18px;
-            margin-bottom: 20px;
-            background: #1a1a2e;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .download-links {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .download-btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 22px;
-            background: rgba(247, 151, 30, 0.15);
-            border: 1.5px solid rgba(247, 151, 30, 0.3);
-            border-radius: 60px;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.25s;
-        }
-        .download-btn:hover {
-            background: #f7971e;
-            border-color: #ffd200;
-            color: #1a1a2e;
-            transform: translateY(-2px);
-        }
-        .quality-badge {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #ffd200;
-        }
-        .download-btn:hover .quality-badge {
-            background: #1a1a2e;
-            color: #ffd200;
-        }
-        .error-message {
-            color: #ff7b7b;
-            text-align: center;
-            padding: 20px;
-            background: rgba(255, 80, 80, 0.1);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 80, 80, 0.2);
-        }
-        .loading {
-            text-align: center;
-            color: #ffd200;
-            padding: 35px;
-            font-weight: 500;
-        }
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 22px;
-            height: 22px;
-            border: 3px solid #ffd200;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.8s linear infinite;
-            margin-left: 12px;
-            vertical-align: middle;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .footer-note {
-            text-align: center;
-            margin-top: 25px;
-            color: #7a7a9a;
-            font-size: 0.8rem;
-        }
-        .format-label {
-            color: #ffd200;
-            font-size: 0.85rem;
-            margin: 10px 0 5px 5px;
-            font-weight: 600;
-        }
-        details {
-            margin-top: 15px;
-            padding: 10px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-        }
-        summary {
-            color: #ffd200;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-        pre {
-            background: #000;
-            padding: 10px;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-size: 0.7rem;
-            color: #0f0;
-            margin-top: 8px;
-        }
-        .yt-mode-switch {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            background: rgba(0,0,0,0.3);
-            padding: 6px;
-            border-radius: 50px;
-        }
-        .yt-mode-btn {
-            flex: 1;
-            padding: 12px 20px;
-            border-radius: 50px;
-            border: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: transparent;
-            color: #aaa;
-        }
-        .yt-mode-btn.active-video {
-            background: #ff4444;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
-        }
-        .yt-mode-btn.active-audio {
-            background: #1db954;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
-        }
-        .yt-mode-btn:hover:not(.active-video):not(.active-audio) {
-            color: #fff;
-            background: rgba(255,255,255,0.1);
-        }
-        .warning-message {
-            color: #ffd200;
-            text-align: center;
-            padding: 15px;
-            background: rgba(255, 210, 0, 0.1);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 210, 0, 0.2);
-            margin-bottom: 10px;
-        }
-        .retry-btn {
-            background: #1db954;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 10px;
-        }
-        .retry-btn:hover {
-            background: #1ed760;
-        }
-
-        /* === STYLE UNTUK SEARCH === */
-        .search-results {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 600px;
-            overflow-y: auto;
-        }
-        .search-result-item {
-            display: flex;
-            gap: 15px;
-            padding: 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .search-result-item:hover {
-            background: rgba(247, 151, 30, 0.15);
-            border-color: rgba(247, 151, 30, 0.3);
-            transform: translateY(-2px);
-        }
-        .search-thumb {
-            width: 160px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 10px;
-            flex-shrink: 0;
-        }
-        .search-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .search-title {
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .search-meta {
-            color: #aaa;
-            font-size: 0.8rem;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .search-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: auto;
-        }
-        .action-btn {
-            padding: 8px 15px;
-            border-radius: 20px;
-            border: none;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: white;
-        }
-        .action-btn.mp4-btn {
-            background: #ff4444;
-        }
-        .action-btn.mp3-btn {
-            background: #1db954;
-        }
-        .action-btn:hover {
-            transform: scale(1.05);
-            filter: brightness(1.2);
-        }
-        .back-btn {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        .back-btn:hover {
-            background: rgba(255,255,255,0.2);
-        }
-        .search-stats {
-            color: #aaa;
-            font-size: 0.85rem;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+        button:hover { transform: scale(1.03); box-shadow: 0 10px 25px rgba(247,151,30,0.5); }
+        .input-buttons { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: flex; gap: 5px; }
+        .input-buttons button { padding: 8px 12px; font-size: 0.9rem; box-shadow: none; background: rgba(255,255,255,0.1); color: #fff; border: none; }
+        .input-buttons button:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); box-shadow: none; }
+        button:disabled { opacity: 0.5; transform: none !important; cursor: not-allowed; box-shadow: none !important; }
+        .platform-badge { display: inline-block; padding: 8px 18px; background: rgba(247,151,30,0.15); border-radius: 40px; color: #ffd200; font-size: 0.9rem; font-weight: 600; margin-bottom: 18px; border: 1px solid rgba(247,151,30,0.3); }
+        .result-area { margin-top: 25px; }
+        .preview-card { background: rgba(0,0,0,0.25); border-radius: 24px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); }
+        .media-title { color: #fff; font-weight: 700; margin-bottom: 15px; font-size: 1rem; word-break: break-word; }
+        .thumbnail { width: 100%; max-height: 280px; object-fit: cover; border-radius: 18px; margin-bottom: 20px; background: #1a1a2e; border: 1px solid rgba(255,255,255,0.1); display: block; }
+        .download-links { display: flex; flex-direction: column; gap: 12px; }
+        .download-btn { display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; background: rgba(247,151,30,0.15); border: 1.5px solid rgba(247,151,30,0.3); border-radius: 60px; color: white; text-decoration: none; font-weight: 600; transition: all 0.25s; }
+        .download-btn:hover { background: #f7971e; border-color: #ffd200; color: #1a1a2e; transform: translateY(-2px); }
+        .quality-badge { background: rgba(0,0,0,0.4); padding: 6px 16px; border-radius: 40px; font-size: 0.75rem; font-weight: 600; color: #ffd200; white-space: nowrap; }
+        .download-btn:hover .quality-badge { background: #1a1a2e; color: #ffd200; }
+        .error-message { color: #ff7b7b; text-align: center; padding: 20px; background: rgba(255,80,80,0.1); border-radius: 20px; border: 1px solid rgba(255,80,80,0.2); line-height: 1.6; }
+        .loading { text-align: center; color: #ffd200; padding: 35px; font-weight: 500; }
+        .loading::after { content: ''; display: inline-block; width: 22px; height: 22px; border: 3px solid #ffd200; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; margin-left: 12px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .footer-note { text-align: center; margin-top: 25px; color: #7a7a9a; font-size: 0.8rem; }
+        .format-label { color: #ffd200; font-size: 0.85rem; margin: 10px 0 5px 5px; font-weight: 600; }
+        .yt-mode-switch { display: flex; gap: 10px; margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 50px; }
+        .yt-mode-btn { flex: 1; padding: 12px 20px; border-radius: 50px; border: none; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.3s; background: transparent; color: #aaa; }
+        .yt-mode-btn.active-video { background: #ff4444; color: #fff; box-shadow: 0 4px 15px rgba(255,68,68,0.3); }
+        .yt-mode-btn.active-audio { background: #1db954; color: #fff; box-shadow: 0 4px 15px rgba(29,185,84,0.3); }
+        .yt-mode-btn:hover:not(.active-video):not(.active-audio) { color: #fff; background: rgba(255,255,255,0.1); }
+        .retry-btn { background: #1db954; color: white; padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; margin-top: 10px; }
+        .retry-btn:hover { background: #1ed760; }
+        .search-result-item { display: flex; gap: 15px; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.05); }
+        .search-result-item:hover { background: rgba(247,151,30,0.2); border-color: #f7971e; transform: translateX(5px); }
+        .search-thumb { width: 120px; height: 68px; object-fit: cover; border-radius: 10px; background: #000; flex-shrink: 0; }
+        .search-info { flex: 1; min-width: 0; }
+        .search-title { color: #fff; font-weight: 600; font-size: 0.9rem; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .search-meta { color: #aaa; font-size: 0.7rem; display: flex; gap: 12px; flex-wrap: wrap; }
+        .search-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 8px; }
+        .mode-indicator { background: #1db954; color: #fff; padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>⬇️ All in One</h1>
-        <div class="subtitle">Download Video & Audio • TikTok • IG • FB • YT • X • Spotify • Search YT</div>
-        
+        <div class="subtitle">Download Video & Audio • TikTok • IG • FB • YT • X • Spotify</div>
+
         <div class="input-area">
             <div class="input-wrapper">
-                <input type="text" id="urlInput" placeholder="Tempel link atau cari video YouTube..." oninput="toggleClearBtn()" />
+                <input type="text" id="urlInput" placeholder="Tempel link atau ketik kata kunci untuk mencari di YouTube..." oninput="toggleClearBtn()" />
                 <div class="input-buttons">
-                    <button class="clear-btn" id="clearBtn" onclick="clearUrl()" title="Hapus link" style="display: none;">&times;</button>
-                    <button class="paste-btn" id="pasteBtn" onclick="pasteUrl()" title="Tempel link">📋</button>
+                    <button id="clearBtn" onclick="clearUrl()" title="Hapus" style="display:none;">✕</button>
+                    <button onclick="pasteUrl()" title="Tempel link">📋</button>
                 </div>
             </div>
-            <div style="display: flex; gap: 10px;">
-                <button id="downloadBtn" onclick="processUrl()" style="flex: 2;">🔍 Cari / Download</button>
-                <button id="searchBtn" onclick="searchYoutube()" style="flex: 1; background: linear-gradient(145deg, #ff4444, #cc0000); color: white;">🎬 Search YT</button>
-            </div>
+            <button id="downloadBtn" onclick="processInput()">Cari / Download</button>
         </div>
 
         <div id="result" class="result-area"></div>
-        <div class="footer-note">by puruboy-api.vercel.app</div>
+        <div class="footer-note">by puruboy-api.vercel.app | 🔍 YouTube Search (Enter)</div>
     </div>
 
-    <script>
-        // === VARIABEL GLOBAL ===
-        let currentYoutubeUrl = '';
-        let youtubeVideoData = null;
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────
+var currentYoutubeUrl = '';
+var searchVideoCache  = [];
+var activeAC          = null;   // AbortController aktif
+var mp3Loaded         = false;  // flag agar tab MP3 tidak re-fetch tiap klik
 
-        async function processUrl() {
-            const urlInput = document.getElementById('urlInput');
-            const btn = document.getElementById('downloadBtn');
-            const searchBtn = document.getElementById('searchBtn');
-            const resultDiv = document.getElementById('result');
-            const url = urlInput.value.trim();
+// ── FETCH HELPER (timeout + abort) ────────────────────────────────────
+function apiFetch(url, body, timeoutMs) {
+    if (activeAC) { try { activeAC.abort(); } catch(e){} }
+    activeAC = new AbortController();
+    var signal = activeAC.signal;
+    var t = setTimeout(function(){ activeAC.abort(); }, timeoutMs || 20000);
+    return fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: signal
+    }).then(function(r){ clearTimeout(t); return r; })
+      .catch(function(e){
+          clearTimeout(t);
+          if (e.name === 'AbortError') throw new Error('Request timeout. Coba lagi.');
+          throw e;
+      });
+}
 
-            if (!url) {
-                resultDiv.innerHTML = '<div class="error-message">❌ Masukkan URL atau kata kunci pencarian</div>';
-                return;
-            }
+// ── URL VALIDATOR ──────────────────────────────────────────────────────
+function isValidUrl(str) {
+    try {
+        var u = new URL(str.indexOf('http') === 0 ? str : 'https://' + str);
+        return u.hostname.indexOf('.') !== -1;
+    } catch(e) { return false; }
+}
 
-            // Deteksi apakah ini URL atau kata kunci
-            const { endpoint, platformName } = detectPlatform(url);
-            
-            if (endpoint) {
-                // Ini adalah URL, proses seperti biasa
-                btn.disabled = true;
-                searchBtn.disabled = true;
-                resultDiv.innerHTML = '<div class="loading">Mendeteksi platform & menghubungi server...</div>';
+// ── ESCAPE HTML ────────────────────────────────────────────────────────
+function esc(s) {
+    if (s == null) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 
-                try {
-                    let apiEndpoint = endpoint;
-                    if (endpoint === 'tiktok') {
-                        apiEndpoint = 'tiktok-v2';
-                    }
+// ── FORMAT ANGKA ───────────────────────────────────────────────────────
+function fmtNum(n) {
+    n = parseInt(n, 10); if (isNaN(n)) return '';
+    if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
+    if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+    if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
+    return String(n);
+}
 
-                    const response = await fetch(`https://puruboy-api.vercel.app/api/downloader/${apiEndpoint}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url: url })
-                    });
+// ── UI HELPERS ─────────────────────────────────────────────────────────
+function setLoading(msg) {
+    document.getElementById('result').innerHTML = '<div class="loading">'+esc(msg)+'</div>';
+    document.getElementById('downloadBtn').disabled = true;
+}
+function setReady() { document.getElementById('downloadBtn').disabled = false; }
+function showError(msg) { document.getElementById('result').innerHTML = '<div class="error-message">❌ '+esc(msg)+'</div>'; }
 
-                    if (!response.ok) throw new Error(`Server error (${response.status})`);
-                    
-                    const data = await response.json();
-                    console.log('📦 Data dari API:', data);
-                    
-                    if (endpoint === 'youtube') {
-                        currentYoutubeUrl = url;
-                        youtubeVideoData = data;
-                        renderYoutubeWithSwitcher(data, platformName);
-                    } else {
-                        renderResult(data, platformName, apiEndpoint, url);
-                    }
+function toggleClearBtn() {
+    var v = document.getElementById('urlInput').value;
+    document.getElementById('clearBtn').style.display = v ? 'block' : 'none';
+}
+function clearUrl() {
+    document.getElementById('urlInput').value = '';
+    toggleClearBtn();
+    document.getElementById('urlInput').focus();
+}
+async function pasteUrl() {
+    try { document.getElementById('urlInput').value = await navigator.clipboard.readText(); toggleClearBtn(); } catch(e){}
+}
 
-                } catch (error) {
-                    resultDiv.innerHTML = `<div class="error-message">❌ Error: ${error.message}</div>`;
-                } finally {
-                    btn.disabled = false;
-                    searchBtn.disabled = false;
-                }
-            } else {
-                // Bukan URL, anggap sebagai kata kunci pencarian YouTube
-                await searchYoutube();
-            }
+// ── ENTRY POINT ────────────────────────────────────────────────────────
+function processInput() {
+    var raw = document.getElementById('urlInput').value.trim();
+    if (!raw) { showError('Masukkan URL atau kata kunci YouTube'); return; }
+    if (isValidUrl(raw)) {
+        processUrl(raw.indexOf('http') === 0 ? raw : 'https://'+raw);
+    } else {
+        searchYouTube(raw);
+    }
+}
+
+// ── PLATFORM DETECT ────────────────────────────────────────────────────
+function detectPlatform(url) {
+    var u = url.toLowerCase();
+    if (u.indexOf('tiktok.com') !== -1 || u.indexOf('vm.tiktok') !== -1 || u.indexOf('vt.tiktok') !== -1)
+        return { endpoint: 'tiktok-v2', platform: 'TikTok' };
+    if (u.indexOf('instagram.com') !== -1 || u.indexOf('instagr.am') !== -1)
+        return { endpoint: 'instagram', platform: 'Instagram' };
+    if (u.indexOf('facebook.com') !== -1 || u.indexOf('fb.watch') !== -1 || u.indexOf('fb.com') !== -1)
+        return { endpoint: 'fbdl', platform: 'Facebook' };
+    if (u.indexOf('youtube.com') !== -1 || u.indexOf('youtu.be') !== -1)
+        return { endpoint: 'youtube', platform: 'YouTube' };
+    if (u.indexOf('x.com') !== -1 || u.indexOf('twitter.com') !== -1)
+        return { endpoint: 'x', platform: 'X/Twitter' };
+    if (u.indexOf('spotify.com') !== -1)
+        return { endpoint: 'spotify', platform: 'Spotify' };
+    return { endpoint: null, platform: null };
+}
+
+// ── PROCESS URL ────────────────────────────────────────────────────────
+async function processUrl(url) {
+    var det = detectPlatform(url);
+    if (!det.endpoint) { showError('Platform tidak dikenali. Didukung: TikTok, IG, FB, YouTube, X, Spotify.'); return; }
+    setLoading('Menghubungi server...');
+    mp3Loaded = false;
+    try {
+        var res = await apiFetch('https://puruboy-api.vercel.app/api/downloader/' + det.endpoint, { url: url });
+        if (!res.ok) throw new Error('Server error (' + res.status + ')');
+        var data = await res.json();
+        if (data.status === false || data.success === false)
+            throw new Error(data.message || data.error || data.msg || 'API mengembalikan error');
+        if (det.endpoint === 'youtube') {
+            currentYoutubeUrl = url;
+            renderYoutube(data, det.platform);
+        } else {
+            renderGeneric(data, det.platform);
         }
+    } catch(e) { showError(e.message); }
+    finally { setReady(); }
+}
 
-        async function searchYoutube() {
-            const urlInput = document.getElementById('urlInput');
-            const btn = document.getElementById('downloadBtn');
-            const searchBtn = document.getElementById('searchBtn');
-            const resultDiv = document.getElementById('result');
-            const query = urlInput.value.trim();
+// ══════════════════════════════════════════════════════════════════════
+// URL EXTRACTOR — handle semua kemungkinan struktur response API
+// ══════════════════════════════════════════════════════════════════════
 
-            if (!query) {
-                resultDiv.innerHTML = '<div class="error-message">❌ Masukkan kata kunci pencarian</div>';
-                return;
-            }
+// Field nama yang PASTI berisi download URL (prioritas tinggi)
+var DL_FIELDS = [
+    'url','download','link','videoUrl','audioUrl','downloadUrl','file','src',
+    'hd','sd','low','high','normal','mp4','mp3','m4a','audio','video',
+    'source','stream','media','href','uri','play_url','playUrl',
+    'download_url','video_url','audio_url','file_url','directUrl','direct_url',
+    'quality_url','downloadLink','fileLink','mirror','fallback'
+];
 
-            btn.disabled = true;
-            searchBtn.disabled = true;
-            resultDiv.innerHTML = '<div class="loading">🔍 Mencari video YouTube...</div>';
+// Field yang SKIP (thumbnail / gambar profil)
+var SKIP_FIELDS = [
+    'thumbnail','thumb','cover','poster','avatar','photo','image','icon',
+    'profile_pic','profile_image','channel_image','author_image','picture'
+];
 
-            try {
-                const response = await fetch(`https://api.siputzx.my.id/api/s/youtube?query=${encodeURIComponent(query)}`);
-                
-                if (!response.ok) throw new Error(`Server error (${response.status})`);
-                
-                const data = await response.json();
-                console.log('📦 Hasil Search:', data);
+function isImageUrl(u) {
+    return /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico)(\?|$)/i.test(u);
+}
 
-                if (!data.status || !data.data || data.data.length === 0) {
-                    resultDiv.innerHTML = '<div class="error-message">❌ Tidak ada hasil ditemukan</div>';
-                    return;
-                }
+function isDownloadUrl(u) {
+    return typeof u === 'string' && u.indexOf('http') === 0 && u.length > 15 && u.length < 4000;
+}
 
-                renderSearchResults(data.data, query);
+// Kumpulkan semua URL dengan prioritas field DL_FIELDS terlebih dulu
+function extractUrls(obj, bag, depth) {
+    if (depth > 12 || obj == null) return;
+    if (typeof obj === 'string') {
+        if (isDownloadUrl(obj) && !isImageUrl(obj)) bag.push(obj);
+        return;
+    }
+    if (Array.isArray(obj)) {
+        for (var i = 0; i < Math.min(obj.length, 80); i++) extractUrls(obj[i], bag, depth + 1);
+        return;
+    }
+    if (typeof obj !== 'object') return;
 
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="error-message">❌ Error: ${error.message}</div>`;
-            } finally {
-                btn.disabled = false;
-                searchBtn.disabled = false;
-            }
-        }
-
-        function renderSearchResults(videos, query) {
-            const resultDiv = document.getElementById('result');
-            
-            let html = `
-                <button class="back-btn" onclick="clearSearch()">⬅️ Kembali</button>
-                <div class="search-stats">🔍 Ditemukan ${videos.length} video untuk "${query}"</div>
-                <div class="search-results">
-            `;
-
-            videos.forEach(video => {
-                const videoUrl = video.url || `https://youtube.com/watch?v=${video.videoId}`;
-                const title = video.title || 'No Title';
-                const thumbnail = video.thumbnail || video.thumb || '';
-                const duration = video.duration || video.timestamp || '';
-                const views = video.views || '';
-                const author = video.author || video.channel || '';
-
-                html += `
-                    <div class="search-result-item" onclick="event.stopPropagation();">
-                        ${thumbnail ? `<img class="search-thumb" src="${thumbnail}" alt="thumb" loading="lazy" onerror="this.style.display='none'">` : ''}
-                        <div class="search-info">
-                            <div class="search-title">${title}</div>
-                            <div class="search-meta">
-                                ${author ? `<span>👤 ${author}</span>` : ''}
-                                ${duration ? `<span>⏱️ ${duration}</span>` : ''}
-                                ${views ? `<span>👁️ ${views}</span>` : ''}
-                            </div>
-                            <div class="search-actions">
-                                <button class="action-btn mp4-btn" onclick="downloadFromSearch('${escapeHtml(videoUrl)}', 'mp4')">
-                                    🎬 MP4
-                                </button>
-                                <button class="action-btn mp3-btn" onclick="downloadFromSearch('${escapeHtml(videoUrl)}', 'mp3')">
-                                    🎵 MP3
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            html += '</div>';
-            resultDiv.innerHTML = html;
-        }
-
-        async function downloadFromSearch(videoUrl, format) {
-            const btn = document.getElementById('downloadBtn');
-            const searchBtn = document.getElementById('searchBtn');
-
-            btn.disabled = true;
-            searchBtn.disabled = true;
-
-            // Update URL input dengan URL video yang dipilih
-            document.getElementById('urlInput').value = videoUrl;
-            currentYoutubeUrl = videoUrl;
-
-            if (format === 'mp4') {
-                // Gunakan endpoint youtube yang sudah ada (bukan ytmp4)
-                await fetchYoutubeVideo(videoUrl);
-            } else if (format === 'mp3') {
-                // Untuk MP3, tetap coba ytmp3 dulu, kalau gagal pakai youtube biasa
-                await fetchYoutubeAudio(videoUrl);
-            }
-
-            btn.disabled = false;
-            searchBtn.disabled = false;
-        }
-
-        async function fetchYoutubeVideo(url) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<div class="loading">🎬 Mengambil video MP4...</div>';
-
-            try {
-                // GUNAKAN ENDPOINT YOUTUBE YANG SUDAH ADA (BUKAN ytmp4)
-                const response = await fetch('https://puruboy-api.vercel.app/api/downloader/youtube', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url })
-                });
-
-                if (!response.ok) throw new Error(`Server error (${response.status})`);
-                
-                const data = await response.json();
-                console.log('📦 Data YouTube:', data);
-                
-                currentYoutubeUrl = url;
-                youtubeVideoData = data;
-                renderYoutubeWithSwitcher(data, 'YouTube');
-
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="error-message">❌ Error MP4: ${error.message}
-                    <br><button class="retry-btn" onclick="fetchYoutubeVideo('${escapeHtml(url)}')">🔄 Coba Lagi</button>
-                    <br><small style="color:#aaa;">Coba gunakan endpoint youtube biasa</small>
-                </div>`;
-            }
-        }
-
-        async function fetchYoutubeAudio(url) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<div class="loading">🎵 Mengambil audio MP3...</div>';
-
-            try {
-                // COBA ytmp3 DULU
-                let response = await fetch('https://puruboy-api.vercel.app/api/downloader/ytmp3', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url })
-                });
-
-                // Jika ytmp3 gagal (404), fallback ke youtube biasa
-                if (!response.ok) {
-                    console.log('⚠️ ytmp3 gagal, fallback ke youtube...');
-                    response = await fetch('https://puruboy-api.vercel.app/api/downloader/youtube', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url: url })
-                    });
-                    
-                    if (!response.ok) throw new Error(`Server error (${response.status})`);
-                    
-                    const data = await response.json();
-                    console.log('📦 Data YouTube (fallback):', data);
-                    
-                    // Coba ekstrak audio dari data youtube
-                    let result = data.result || data.data || data;
-                    let audioUrl = null;
-                    
-                    // Cari URL audio dalam formats
-                    if (result.formats) {
-                        const audioFormat = result.formats.find(f => 
-                            f.mimeType?.includes('audio') || 
-                            f.quality?.includes('audio') ||
-                            f.type?.includes('audio')
-                        );
-                        if (audioFormat?.url) audioUrl = audioFormat.url;
-                    }
-                    
-                    // Cari di semua URL
-                    if (!audioUrl) {
-                        const allUrls = findAllUrlsAggressive(result);
-                        const audioUrls = allUrls.filter(u => 
-                            u.includes('audio') || 
-                            u.match(/\.(mp3|m4a|aac|ogg)/i)
-                        );
-                        if (audioUrls.length > 0) audioUrl = audioUrls[0];
-                    }
-                    
-                    if (!audioUrl) {
-                        throw new Error('Tidak dapat menemukan URL audio. Coba download video MP4 saja.');
-                    }
-                    
-                    // Buat data dummy dengan URL audio
-                    data.result = { ...result, audioUrl: audioUrl };
-                    
-                    currentYoutubeUrl = url;
-                    youtubeVideoData = data;
-                    renderYoutubeWithSwitcher(data, 'YouTube');
-                    
-                    // Auto switch ke audio mode
-                    setTimeout(() => {
-                        const audioBtn = document.getElementById('ytAudioBtn');
-                        if (audioBtn) audioBtn.click();
-                    }, 100);
-                    
-                    return;
-                }
-                
-                const data = await response.json();
-                console.log('📦 Data ytmp3:', data);
-                
-                currentYoutubeUrl = url;
-                youtubeVideoData = data;
-                renderYoutubeWithSwitcher(data, 'YouTube');
-                
-                // Auto switch ke audio mode
-                setTimeout(() => {
-                    const audioBtn = document.getElementById('ytAudioBtn');
-                    if (audioBtn) audioBtn.click();
-                }, 100);
-
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="error-message">❌ Error MP3: ${error.message}
-                    <br><button class="retry-btn" onclick="fetchYoutubeAudio('${escapeHtml(url)}')">🔄 Coba Lagi</button>
-                    <br><button class="retry-btn" onclick="fetchYoutubeVideo('${escapeHtml(url)}')" style="background:#ff4444;">🎬 Download MP4 Saja</button>
-                </div>`;
-            }
-        }
-
-        function detectPlatform(url) {
-            const u = url.toLowerCase();
-            if (u.includes('tiktok.com') || u.includes('vm.tiktok') || u.includes('vt.tiktok') || (u.includes('tiktok') && u.includes('/video/'))) 
-                return { endpoint: 'tiktok', platformName: 'TikTok' };
-            if (u.includes('instagram.com') || u.includes('instagr.am')) 
-                return { endpoint: 'instagram', platformName: 'Instagram' };
-            if (u.includes('facebook.com') || u.includes('fb.watch') || u.includes('fb.com')) 
-                return { endpoint: 'fbdl', platformName: 'Facebook' };
-            if (u.includes('youtube.com') || u.includes('youtu.be')) 
-                return { endpoint: 'youtube', platformName: 'YouTube' };
-            if (u.includes('x.com') || u.includes('twitter.com')) 
-                return { endpoint: 'x', platformName: 'X/Twitter' };
-            if (u.includes('spotify.com')) 
-                return { endpoint: 'spotify', platformName: 'Spotify' };
-            return { endpoint: null, platformName: null };
-        }
-
-        function renderYoutubeWithSwitcher(data, platformName) {
-            const resultDiv = document.getElementById('result');
-            
-            let result = data.result || data.data || data;
-            
-            let html = `<div class="preview-card">`;
-            html += `<span class="platform-badge">📌 ${platformName}</span>`;
-            
-            let title = result.title || result.desc || result.description || '';
-            if (title && typeof title === 'string' && title.length < 300) {
-                html += `<div class="media-title">📝 ${title.substring(0, 200)}</div>`;
-            }
-            
-            let thumbnail = result.thumbnail || result.thumb || result.cover || '';
-            if (thumbnail && typeof thumbnail === 'string' && thumbnail.startsWith('http')) {
-                html += `<img class="thumbnail" src="${thumbnail}" alt="thumbnail" loading="lazy" onerror="this.style.display='none'">`;
-            }
-            
-            let author = result.author || result.username || result.owner || result.creator;
-            if (author) {
-                if (typeof author === 'string') {
-                    html += `<div style="color: #aaa; font-size: 0.8rem; margin-bottom: 15px;">👤 ${author}</div>`;
-                } else if (author.username || author.nickname) {
-                    html += `<div style="color: #aaa; font-size: 0.8rem; margin-bottom: 15px;">👤 ${author.username || author.nickname}</div>`;
-                }
-            }
-            
-            html += `<div class="yt-mode-switch">
-                <button class="yt-mode-btn active-video" id="ytVideoBtn" onclick="switchToYtVideo()">🎬 Video (MP4)</button>
-                <button class="yt-mode-btn" id="ytAudioBtn" onclick="switchToYtMp3()">🎵 Audio (MP3)</button>
-            </div>`;
-            
-            html += `<div id="ytVideoContent">`;
-            html += renderDownloadLinks(result, 'video');
-            html += `</div>`;
-            
-            html += `<div id="ytAudioContent" style="display:none;">`;
-            // Pre-render audio content
-            html += renderDownloadLinks(result, 'audio');
-            html += `</div>`;
-            
-            html += `</div>`;
-            resultDiv.innerHTML = html;
-        }
-
-        function renderDownloadLinks(result, type) {
-            let html = `<div class="download-links">`;
-            
-            if (type === 'video') {
-                let allUrls = findAllUrls(result);
-                let videoUrls = allUrls.filter(u => 
-                    u.match(/\.(mp4|webm|mov|avi|mkv)/i) || 
-                    u.includes('video') || 
-                    (u.includes('?') && !u.includes('audio'))
-                );
-                
-                let formats = result.formats || result.video || [];
-                if (Array.isArray(formats)) {
-                    formats.forEach(fmt => {
-                        if (fmt.url && !videoUrls.includes(fmt.url)) {
-                            videoUrls.push(fmt.url);
-                        }
-                    });
-                }
-                
-                if (result.url || result.download || result.link || result.videoUrl) {
-                    let directUrl = result.url || result.download || result.link || result.videoUrl;
-                    if (typeof directUrl === 'string' && !videoUrls.includes(directUrl)) {
-                        videoUrls.push(directUrl);
+    var keys = Object.keys(obj).slice(0, 80);
+    // Pass 1: field prioritas dulu
+    for (var i = 0; i < keys.length; i++) {
+        var k = keys[i], kl = k.toLowerCase();
+        if (SKIP_FIELDS.indexOf(kl) !== -1) continue;
+        if (DL_FIELDS.indexOf(kl) !== -1) {
+            var v = obj[k];
+            if (typeof v === 'string' && isDownloadUrl(v) && !isImageUrl(v)) {
+                bag.push(v);
+            } else if (Array.isArray(v)) {
+                // array of string atau array of {url, quality, ...}
+                for (var j = 0; j < Math.min(v.length, 30); j++) {
+                    var item = v[j];
+                    if (typeof item === 'string' && isDownloadUrl(item) && !isImageUrl(item)) bag.push(item);
+                    else if (item && typeof item === 'object') {
+                        var candidate = item.url || item.download || item.link || item.src || item.file || item.href;
+                        if (candidate && isDownloadUrl(candidate) && !isImageUrl(candidate)) bag.push(candidate);
                     }
                 }
-                
-                videoUrls = [...new Set(videoUrls)];
-                
-                if (videoUrls.length > 0) {
-                    html += `<div class="format-label">🎬 VIDEO</div>`;
-                    videoUrls.forEach((url, idx) => {
-                        let label = '📹 Download Video';
-                        if (videoUrls.length > 1) label += ` ${idx+1}`;
-                        html += `<a class="download-btn" href="${url}" target="_blank" rel="noopener noreferrer">
-                            <span>${label}</span>
-                            <span class="quality-badge">MP4</span>
-                        </a>`;
-                    });
-                } else {
-                    html += `<div class="error-message">⚠️ Tidak ada link video ditemukan.</div>`;
-                }
-            } else if (type === 'audio') {
-                let allUrls = findAllUrlsAggressive(result);
-                
-                let audioUrls = allUrls.filter(u => 
-                    u.match(/\.(mp3|m4a|aac|ogg|wav|mpeg|opus|weba)/i) || 
-                    u.includes('audio') || 
-                    u.includes('music') ||
-                    u.includes('sound')
-                );
-                
-                if (audioUrls.length === 0) {
-                    audioUrls = allUrls.filter(u => 
-                        u.includes('download') || 
-                        u.includes('file') ||
-                        u.includes('stream')
-                    );
-                }
-                
-                // Cek juga audioUrl langsung
-                if (result.audioUrl && typeof result.audioUrl === 'string') {
-                    audioUrls.push(result.audioUrl);
-                }
-                
-                audioUrls = [...new Set(audioUrls)];
-                
-                if (audioUrls.length > 0) {
-                    html += `<div class="format-label">🎵 AUDIO MP3</div>`;
-                    audioUrls.forEach((url, idx) => {
-                        let label = '🎧 Download MP3';
-                        if (audioUrls.length > 1) label += ` ${idx+1}`;
-                        html += `<a class="download-btn" href="${url}" target="_blank" rel="noopener noreferrer">
-                            <span>${label}</span>
-                            <span class="quality-badge">MP3</span>
-                        </a>`;
-                    });
-                } else {
-                    html += `<div class="warning-message">⚠️ Tidak ada link audio ditemukan. Coba refresh halaman.</div>`;
-                }
-            }
-            
-            html += `</div>`;
-            return html;
-        }
-
-        function findAllUrlsAggressive(obj, urls = []) {
-            if (!obj) return urls;
-            
-            if (typeof obj === 'string') {
-                if (obj.startsWith('http') && obj.length > 10) {
-                    urls.push(obj);
-                }
-            } 
-            else if (Array.isArray(obj)) {
-                obj.forEach(item => findAllUrlsAggressive(item, urls));
-            } 
-            else if (typeof obj === 'object') {
-                for (let key in obj) {
-                    findAllUrlsAggressive(obj[key], urls);
-                }
-            }
-            
-            return [...new Map(urls.map(u => [u, u])).values()];
-        }
-
-        function findAllUrls(obj, urls = []) {
-            if (!obj) return urls;
-            
-            if (typeof obj === 'string') {
-                if (obj.startsWith('http') && 
-                    (obj.includes('.mp4') || obj.includes('.mp3') || 
-                     obj.includes('video') || obj.includes('download') || 
-                     obj.includes('media') || obj.includes('blob:') || 
-                     obj.includes('?') || obj.match(/\.(mp4|mp3|m4a|webm|mov)/i))) {
-                    urls.push(obj);
-                }
-            } 
-            else if (Array.isArray(obj)) {
-                obj.forEach(item => findAllUrls(item, urls));
-            } 
-            else if (typeof obj === 'object') {
-                const skipKeys = ['thumbnail', 'thumb', 'cover', 'avatar', 'profile_pic', 'image', 'icon'];
-                for (let key in obj) {
-                    if (skipKeys.includes(key)) continue;
-                    findAllUrls(obj[key], urls);
-                }
-            }
-            
-            return [...new Map(urls.map(u => [u, u])).values()];
-        }
-
-        function switchToYtVideo() {
-            const videoBtn = document.getElementById('ytVideoBtn');
-            const audioBtn = document.getElementById('ytAudioBtn');
-            const videoContent = document.getElementById('ytVideoContent');
-            const audioContent = document.getElementById('ytAudioContent');
-            
-            if (videoBtn) videoBtn.className = 'yt-mode-btn active-video';
-            if (audioBtn) audioBtn.className = 'yt-mode-btn';
-            if (videoContent) videoContent.style.display = 'block';
-            if (audioContent) audioContent.style.display = 'none';
-        }
-
-        function switchToYtMp3() {
-            const videoBtn = document.getElementById('ytVideoBtn');
-            const audioBtn = document.getElementById('ytAudioBtn');
-            const videoContent = document.getElementById('ytVideoContent');
-            const audioContent = document.getElementById('ytAudioContent');
-            
-            if (videoBtn) videoBtn.className = 'yt-mode-btn';
-            if (audioBtn) audioBtn.className = 'yt-mode-btn active-audio';
-            if (videoContent) videoContent.style.display = 'none';
-            if (audioContent) audioContent.style.display = 'block';
-        }
-
-        function renderResult(data, platformName, endpoint, originalUrl) {
-            const resultDiv = document.getElementById('result');
-            
-            if (data.status === false || data.error) {
-                resultDiv.innerHTML = `<div class="error-message">❌ Gagal: ${data.message || data.error || 'Konten tidak tersedia'}</div>`;
-                return;
-            }
-
-            let result = data.result || data.data || data;
-            
-            let videoArray = result.video || (result.medias && result.medias.filter(m => m.type === 'video')) || [];
-            let audioArray = result.audio || result.music || (result.medias && result.medias.filter(m => m.type === 'audio')) || [];
-            
-            let allDownloadUrls = findAllUrls(result);
-            
-            if (Array.isArray(videoArray)) {
-                videoArray.forEach(v => {
-                    if (v.url) allDownloadUrls.push(v.url);
-                });
-            }
-            if (Array.isArray(audioArray)) {
-                audioArray.forEach(a => {
-                    if (a.url) allDownloadUrls.push(a.url);
-                });
-            }
-            if (result.videoUrl) allDownloadUrls.push(result.videoUrl);
-            if (result.audioUrl) allDownloadUrls.push(result.audioUrl);
-            if (result.download) allDownloadUrls.push(result.download);
-            if (result.link) allDownloadUrls.push(result.link);
-            
-            allDownloadUrls = [...new Set(allDownloadUrls.filter(url => 
-                url && typeof url === 'string' && url.startsWith('http') && url.length > 10
-            ))];
-            
-            let html = `<div class="preview-card">`;
-            html += `<span class="platform-badge">📌 ${platformName}</span>`;
-            
-            let title = result.title || result.desc || result.description || result.caption || result.text || '';
-            if (title && typeof title === 'string' && title.length < 300) {
-                html += `<div class="media-title">📝 ${title.substring(0, 200)}</div>`;
-            }
-            
-            let thumbnail = result.thumbnail || result.thumb || result.cover || result.origin_cover || result.image;
-            if (thumbnail && typeof thumbnail === 'string' && thumbnail.startsWith('http')) {
-                html += `<img class="thumbnail" src="${thumbnail}" alt="thumbnail" loading="lazy" onerror="this.style.display='none'">`;
-            }
-            
-            let author = result.author || result.username || result.owner || result.creator;
-            if (author) {
-                if (typeof author === 'string') {
-                    html += `<div style="color: #aaa; font-size: 0.8rem; margin-bottom: 15px;">👤 ${author}</div>`;
-                } else if (author.username || author.nickname) {
-                    html += `<div style="color: #aaa; font-size: 0.8rem; margin-bottom: 15px;">👤 ${author.username || author.nickname}</div>`;
-                }
-            }
-            
-            html += `<div class="download-links">`;
-            
-            if (allDownloadUrls.length === 0) {
-                html += `<div class="error-message">⚠️ Tidak ada link download ditemukan.</div>`;
-                html += `<details><summary>🔍 Lihat data mentah</summary><pre>${JSON.stringify(result, null, 2)}</pre></details>`;
-            } else {
-                const videoUrls = allDownloadUrls.filter(u => 
-                    u.match(/\.(mp4|webm|mov|avi|mkv)/i) || 
-                    u.includes('video') || 
-                    (u.includes('?') && !u.includes('audio'))
-                );
-                const audioUrls = allDownloadUrls.filter(u => 
-                    u.match(/\.(mp3|m4a|aac|ogg|wav|mpeg)/i) || 
-                    u.includes('audio') || 
-                    u.includes('music')
-                );
-                
-                if (videoUrls.length > 0) {
-                    html += `<div class="format-label">🎬 VIDEO</div>`;
-                    videoUrls.forEach((url, idx) => {
-                        let label = '📹 Download Video';
-                        if (videoUrls.length > 1) label += ` ${idx+1}`;
-                        html += `<a class="download-btn" href="${url}" target="_blank" rel="noopener noreferrer">
-                            <span>${label}</span>
-                            <span class="quality-badge">MP4</span>
-                        </a>`;
-                    });
-                }
-                
-                if (audioUrls.length > 0) {
-                    html += `<div class="format-label">🎵 AUDIO / MUSIC</div>`;
-                    audioUrls.forEach((url, idx) => {
-                        let label = '🎧 Download Audio';
-                        if (audioUrls.length > 1) label += ` ${idx+1}`;
-                        html += `<a class="download-btn" href="${url}" target="_blank" rel="noopener noreferrer">
-                            <span>${label}</span>
-                            <span class="quality-badge">MP3</span>
-                        </a>`;
-                    });
-                }
-                
-                const otherUrls = allDownloadUrls.filter(u => !videoUrls.includes(u) && !audioUrls.includes(u));
-                if (otherUrls.length > 0 && videoUrls.length === 0 && audioUrls.length === 0) {
-                    html += `<div class="format-label">⬇️ LINK DOWNLOAD</div>`;
-                    otherUrls.forEach((url, idx) => {
-                        html += `<a class="download-btn" href="${url}" target="_blank" rel="noopener noreferrer">
-                            <span>📎 Download Link ${idx+1}</span>
-                            <span class="quality-badge">FILE</span>
-                        </a>`;
-                    });
-                }
-            }
-            
-            html += `</div></div>`;
-            resultDiv.innerHTML = html;
-        }
-
-        function clearSearch() {
-            document.getElementById('result').innerHTML = '';
-            document.getElementById('urlInput').value = '';
-            document.getElementById('urlInput').focus();
-            toggleClearBtn();
-        }
-
-        function escapeHtml(text) {
-            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-        }
-
-        function toggleClearBtn() {
-            const urlInput = document.getElementById('urlInput');
-            const clearBtn = document.getElementById('clearBtn');
-            clearBtn.style.display = urlInput.value.length > 0 ? 'block' : 'none';
-        }
-
-        function clearUrl() {
-            const urlInput = document.getElementById('urlInput');
-            urlInput.value = '';
-            toggleClearBtn();
-            urlInput.focus();
-        }
-
-        async function pasteUrl() {
-            try {
-                const text = await navigator.clipboard.readText();
-                const urlInput = document.getElementById('urlInput');
-                urlInput.value = text;
-                toggleClearBtn();
-                urlInput.focus();
-            } catch (err) {
-                console.error('Gagal menempel link: ', err);
+            } else if (v && typeof v === 'object' && !Array.isArray(v)) {
+                extractUrls(v, bag, depth + 1);
             }
         }
+    }
+    // Pass 2: sisa field (rekursif)
+    for (var i = 0; i < keys.length; i++) {
+        var k = keys[i], kl = k.toLowerCase();
+        if (SKIP_FIELDS.indexOf(kl) !== -1) continue;
+        if (DL_FIELDS.indexOf(kl) !== -1) continue; // sudah di pass 1
+        extractUrls(obj[k], bag, depth + 1);
+    }
+}
 
-        document.getElementById('urlInput').addEventListener('keypress', e => { 
-            if (e.key === 'Enter') processUrl(); 
+function classifyUrl(u) {
+    var ul = u.toLowerCase();
+    if (/\.(mp4|webm|mov|avi|mkv|flv|3gp)/.test(ul)) return 'video';
+    if (/\.(mp3|m4a|aac|ogg|wav|opus|weba|flac)/.test(ul)) return 'audio';
+    if (ul.indexOf('googlevideo') !== -1 || ul.indexOf('videoplayback') !== -1) return 'video';
+    if (ul.indexOf('video') !== -1 && ul.indexOf('audio') === -1) return 'video';
+    if (ul.indexOf('audio') !== -1 || ul.indexOf('music') !== -1) return 'audio';
+    return 'other';
+}
+
+// Ambil meta: title, thumbnail, author
+function getMeta(data) {
+    var r = data.result || data.data || data;
+    var title = r.title || r.desc || r.description || r.caption || r.name || '';
+    // thumbnail
+    var thumb = '';
+    var thumbCandidates = [r.thumbnail, r.thumb, r.cover, r.poster, r.image];
+    for (var i = 0; i < thumbCandidates.length; i++) {
+        var t = thumbCandidates[i];
+        if (typeof t === 'string' && t.indexOf('http') === 0) { thumb = t; break; }
+        if (t && typeof t === 'object' && t.url && t.url.indexOf('http') === 0) { thumb = t.url; break; }
+        if (Array.isArray(t) && t[0]) {
+            var ti = typeof t[0] === 'string' ? t[0] : (t[0].url || '');
+            if (ti.indexOf('http') === 0) { thumb = ti; break; }
+        }
+    }
+    // author
+    var a = r.author || r.uploader || r.username || r.channel || r.creator || '';
+    var author = typeof a === 'string' ? a : (a.name || a.username || a.nickname || a.title || '');
+    return {
+        title: String(title).substring(0, 200),
+        thumb: thumb,
+        author: String(author).substring(0, 100)
+    };
+}
+
+// Bangun objek { videos[], audios[], others[] }
+function getLinks(data) {
+    var r = data.result || data.data || data;
+    var bag = [];
+    extractUrls(r, bag, 0);
+    var seen = {}, unique = [];
+    for (var i = 0; i < bag.length; i++) {
+        if (!seen[bag[i]]) { seen[bag[i]] = 1; unique.push(bag[i]); }
+    }
+    var videos = [], audios = [], others = [];
+    for (var i = 0; i < unique.length; i++) {
+        var c = classifyUrl(unique[i]);
+        if (c === 'video') videos.push(unique[i]);
+        else if (c === 'audio') audios.push(unique[i]);
+        else others.push(unique[i]);
+    }
+    return { videos: videos.slice(0,8), audios: audios.slice(0,8), others: others.slice(0,5) };
+}
+
+// ── RENDER TOMBOL DOWNLOAD ─────────────────────────────────────────────
+function buildButtons(links, mode) {
+    // mode: 'video' | 'audio' | 'all' | 'ytmp3'
+    var html = '<div class="download-links">';
+    var hasAny = false;
+
+    // Video
+    if (mode !== 'audio' && mode !== 'ytmp3' && links.videos.length) {
+        hasAny = true;
+        html += '<div class="format-label">🎬 VIDEO</div>';
+        links.videos.forEach(function(u, i) {
+            var q = 'MP4';
+            if (u.indexOf('1080') !== -1) q = '1080p';
+            else if (u.indexOf('720') !== -1) q = '720p';
+            else if (u.indexOf('480') !== -1) q = '480p';
+            else if (u.indexOf('360') !== -1) q = '360p';
+            var lbl = links.videos.length > 1 ? '📹 Download Video '+(i+1) : '📹 Download Video';
+            html += '<a class="download-btn" href="'+u+'" target="_blank" rel="noopener noreferrer"><span>'+lbl+'</span><span class="quality-badge">'+q+'</span></a>';
         });
-        
-        window.onload = () => {
-            document.getElementById('urlInput').focus();
-            toggleClearBtn();
-        };
-    </script>
+    }
+
+    // Audio
+    if (mode !== 'video' && links.audios.length) {
+        hasAny = true;
+        html += '<div class="format-label">🎵 AUDIO</div>';
+        links.audios.forEach(function(u, i) {
+            var lbl = links.audios.length > 1 ? '🎧 Download Audio '+(i+1) : '🎧 Download Audio';
+            html += '<a class="download-btn" href="'+u+'" target="_blank" rel="noopener noreferrer"><span>'+lbl+'</span><span class="quality-badge">MP3</span></a>';
+        });
+    }
+
+    // Others (misal FB sd/hd yang tidak teklasifikasi sebagai video/audio)
+    if (!hasAny && links.others.length) {
+        hasAny = true;
+        html += '<div class="format-label">⬇️ DOWNLOAD</div>';
+        links.others.forEach(function(u, i) {
+            html += '<a class="download-btn" href="'+u+'" target="_blank" rel="noopener noreferrer"><span>⬇️ Download '+(i+1)+'</span><span class="quality-badge">FILE</span></a>';
+        });
+    }
+
+    // Jika semua mode 'video' tapi tidak ada video, fallback ke others
+    if (!hasAny && mode === 'video' && links.others.length) {
+        html += '<div class="format-label">⬇️ DOWNLOAD</div>';
+        links.others.forEach(function(u, i) {
+            html += '<a class="download-btn" href="'+u+'" target="_blank" rel="noopener noreferrer"><span>⬇️ Download '+(i+1)+'</span><span class="quality-badge">FILE</span></a>';
+        });
+        hasAny = true;
+    }
+
+    if (!hasAny) html += '<div class="error-message">⚠️ Tidak ada link download ditemukan di response API.</div>';
+    html += '</div>';
+    return html;
+}
+
+// ── RENDER GENERIC (TikTok, IG, FB, X, Spotify) ────────────────────────
+function renderGeneric(data, platform) {
+    var meta  = getMeta(data);
+    var links = getLinks(data);
+    var html  = '<div class="preview-card">';
+    html += '<span class="platform-badge">📌 '+esc(platform)+'</span>';
+    if (meta.title)  html += '<div class="media-title">📝 '+esc(meta.title)+'</div>';
+    if (meta.thumb)  html += '<img class="thumbnail" src="'+esc(meta.thumb)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+    if (meta.author) html += '<div style="color:#aaa;font-size:0.8rem;margin-bottom:15px;">👤 '+esc(meta.author)+'</div>';
+    html += buildButtons(links, 'all');
+    html += '</div>';
+    document.getElementById('result').innerHTML = html;
+}
+
+// ── RENDER YOUTUBE ─────────────────────────────────────────────────────
+function renderYoutube(data, platform) {
+    var meta  = getMeta(data);
+    var links = getLinks(data);
+    var html  = '<div class="preview-card">';
+    html += '<span class="platform-badge">📌 '+esc(platform)+'</span>';
+    if (meta.title)  html += '<div class="media-title">📝 '+esc(meta.title)+'</div>';
+    if (meta.thumb)  html += '<img class="thumbnail" src="'+esc(meta.thumb)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+    if (meta.author) html += '<div style="color:#aaa;font-size:0.8rem;margin-bottom:15px;">👤 '+esc(meta.author)+'</div>';
+    html += '<div class="yt-mode-switch">';
+    html += '<button class="yt-mode-btn active-video" id="ytVideoBtn" onclick="switchYt(\'video\')">🎬 Video (MP4)</button>';
+    html += '<button class="yt-mode-btn" id="ytAudioBtn" onclick="switchYt(\'audio\')">🎵 Audio (MP3)</button>';
+    html += '</div>';
+    html += '<div id="ytVideoContent">'+buildButtons(links, 'video')+'</div>';
+    html += '<div id="ytAudioContent" style="display:none;"></div>';
+    html += '</div>';
+    document.getElementById('result').innerHTML = html;
+}
+
+function switchYt(mode) {
+    var vBtn = document.getElementById('ytVideoBtn');
+    var aBtn = document.getElementById('ytAudioBtn');
+    var vC   = document.getElementById('ytVideoContent');
+    var aC   = document.getElementById('ytAudioContent');
+    if (!vBtn || !vC || !aC) return;
+    if (mode === 'video') {
+        vBtn.className = 'yt-mode-btn active-video'; aBtn.className = 'yt-mode-btn';
+        vC.style.display = 'block'; aC.style.display = 'none';
+    } else {
+        aBtn.className = 'yt-mode-btn active-audio'; vBtn.className = 'yt-mode-btn';
+        vC.style.display = 'none'; aC.style.display = 'block';
+        if (!mp3Loaded) loadYtMp3();
+    }
+}
+
+async function loadYtMp3() {
+    var aC = document.getElementById('ytAudioContent');
+    if (!aC) return;
+    mp3Loaded = true;
+    aC.innerHTML = '<div class="loading">Mengambil audio MP3...</div>';
+    try {
+        if (!currentYoutubeUrl) throw new Error('URL YouTube hilang, coba download ulang.');
+        var res = await apiFetch('https://puruboy-api.vercel.app/api/downloader/ytmp3', { url: currentYoutubeUrl });
+        if (!res.ok) throw new Error('Server error (' + res.status + ')');
+        var data = await res.json();
+        if (data.status === false || data.success === false)
+            throw new Error(data.message || data.error || 'API error');
+
+        var links = getLinks(data);
+        // ytmp3 kadang URL-nya masuk 'video' karena tidak ada ekstensi — promosikan ke audio
+        if (!links.audios.length && links.videos.length) {
+            links.audios = links.videos; links.videos = [];
+        }
+        if (!links.audios.length && links.others.length) {
+            links.audios = links.others; links.others = [];
+        }
+        aC.innerHTML = buildButtons(links, 'ytmp3');
+    } catch(e) {
+        mp3Loaded = false; // boleh retry
+        aC.innerHTML = '<div class="error-message">❌ '+esc(e.message)+'</div>'
+            + '<div style="text-align:center;margin-top:10px"><button class="retry-btn" onclick="loadYtMp3()">🔄 Coba Lagi</button></div>';
+    }
+}
+
+// ── YOUTUBE SEARCH ─────────────────────────────────────────────────────
+async function searchYouTube(query) {
+    setLoading('Mencari di YouTube...');
+    try {
+        var res = await apiFetch('https://api.siputzx.my.id/api/s/youtube', { query: query }, 15000);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var data = await res.json();
+
+        var videos = [];
+        if (data.status && Array.isArray(data.data))          videos = data.data;
+        else if (Array.isArray(data))                          videos = data;
+        else if (Array.isArray(data.videos))                   videos = data.videos;
+        else if (Array.isArray(data.result))                   videos = data.result;
+        else if (Array.isArray(data.items))                    videos = data.items;
+        else if (data.data && Array.isArray(data.data.items))  videos = data.data.items;
+
+        if (!videos.length) throw new Error('Tidak ada hasil untuk "' + query + '"');
+        searchVideoCache = videos;
+        renderSearchResults(videos, query);
+    } catch(e) { showError(e.message); }
+    finally { setReady(); }
+}
+
+function selectVideo(index) {
+    var v = searchVideoCache[index];
+    if (!v) { showError('Data video tidak ditemukan'); return; }
+    var id = v.videoId || v.id || v.video_id || '';
+    if (!id) { showError('ID video tidak valid'); return; }
+    var url = 'https://www.youtube.com/watch?v=' + id;
+    document.getElementById('urlInput').value = url;
+    toggleClearBtn();
+    processUrl(url);
+}
+
+function renderSearchResults(videos, query) {
+    var html = '<div class="preview-card">';
+    html += '<div class="search-header">';
+    html += '<span class="platform-badge">🔍 "'+esc(query.substring(0,40))+'"</span>';
+    html += '<span class="mode-indicator">Klik untuk download</span>';
+    html += '</div>';
+
+    videos.forEach(function(v, i) {
+        var id    = v.videoId || v.id || v.video_id || '';
+        var title = esc((v.title || 'No title').substring(0, 100));
+        var dur   = v.duration || v.length || '';
+        var views = v.views ? fmtNum(v.views) : '';
+        var pub   = (v.publishedAt || v.uploadDate || v.published || '').substring(0, 10);
+        // thumbnail: string | array of string | array of {url}
+        var thumb = '';
+        if (typeof v.thumbnail === 'string' && v.thumbnail.indexOf('http') === 0) thumb = v.thumbnail;
+        else if (Array.isArray(v.thumbnails) && v.thumbnails[0]) {
+            thumb = typeof v.thumbnails[0] === 'string' ? v.thumbnails[0] : (v.thumbnails[0].url || '');
+        }
+        if (!thumb && id) thumb = 'https://i.ytimg.com/vi/'+id+'/mqdefault.jpg';
+
+        html += '<div class="search-result-item" onclick="selectVideo('+i+')">';
+        html += '<img class="search-thumb" src="'+esc(thumb)+'" alt="" onerror="this.style.display=\'none\'">';
+        html += '<div class="search-info">';
+        html += '<div class="search-title">'+title+'</div>';
+        html += '<div class="search-meta">';
+        if (dur)   html += '<span>⏱ '+esc(String(dur))+'</span>';
+        if (views) html += '<span>👁 '+esc(views)+'</span>';
+        if (pub)   html += '<span>📅 '+esc(pub)+'</span>';
+        html += '</div></div></div>';
+    });
+
+    html += '<div style="margin-top:15px;text-align:center;">';
+    html += '<button class="retry-btn" onclick="resetSearch()" style="background:#555;">← Kembali</button>';
+    html += '</div></div>';
+    document.getElementById('result').innerHTML = html;
+}
+
+function resetSearch() {
+    searchVideoCache = [];
+    document.getElementById('result').innerHTML = '';
+    document.getElementById('urlInput').focus();
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────
+document.getElementById('urlInput').addEventListener('keypress', function(e){ if (e.key==='Enter') processInput(); });
+window.onload = function(){ document.getElementById('urlInput').focus(); toggleClearBtn(); };
+</script>
 </body>
 </html>
